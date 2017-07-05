@@ -3,11 +3,19 @@ require 'minitest/autorun'
 require 'logger'
 
 # This connection will do for database-independent bug reports.
-connection_options = {
-  adapter: 'postgresql',
-  database: 'bug_test',
-  prepared_statements: false
-}
+if ENV["POSTGRESQL"] == "true"
+  connection_options = {
+    adapter: 'postgresql',
+    database: 'bug_test',
+    prepared_statements: false
+  }
+else
+  connection_options = {
+    adapter: 'sqlite3',
+    database: ':memory:',
+    prepared_statements: false
+  }
+end
 ActiveRecord::Base.establish_connection(connection_options)
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 
